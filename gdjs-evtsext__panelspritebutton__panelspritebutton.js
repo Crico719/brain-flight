@@ -812,6 +812,8 @@ gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.d
 };
 
 gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.doStepPostEvents = function(parentEventsFunctionContext) {
+  try { this._fitLabelText(); } catch (e) {}
+
 
 var that = this;
 var runtimeScene = this._instanceContainer;
@@ -1909,12 +1911,54 @@ gdjs.copyArray(eventsFunctionContext.getObjects("Label"), gdjs.evtsExt__PanelSpr
 for(var i = 0, len = gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.SetLabelTextOpContext.GDBitmapLabelObjects1.length ;i < len;++i) {
     gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.SetLabelTextOpContext.GDBitmapLabelObjects1[i].getBehavior(eventsFunctionContext.getBehaviorName("Text")).setText(eventsFunctionContext.getArgument("Value"));
 }
+{
+  var __btnOwner = null;
+  try {
+    var __objs = eventsFunctionContext.getObjects("Object");
+    if (__objs && __objs.length) __btnOwner = __objs[0];
+  } catch (e) {}
+  if (__btnOwner && __btnOwner._fitLabelText) __btnOwner._fitLabelText();
+}
+
 }
 }
 
 }
 
 
+};
+
+
+gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype._fitLabelText = function() {
+  var labels = [];
+  try { labels = this._instanceContainer.getObjects("Label"); } catch (e) { labels = []; }
+  if (!labels || !labels.length) return;
+  var maxW = Math.max(48, this.getWidth() - 24);
+  var maxH = Math.max(28, this.getHeight() - 14);
+  for (var i = 0; i < labels.length; i++) {
+    var label = labels[i];
+    var tb = label.getBehavior("Text");
+    if (tb) {
+      if (tb.setTextAlignment) tb.setTextAlignment("center");
+      if (tb.setVerticalTextAlignment) tb.setVerticalTextAlignment("center");
+      if (tb.setWrapping) tb.setWrapping(true);
+      if (tb.setWrappingWidth) tb.setWrappingWidth(maxW);
+    }
+    if (label.setTextAlignment) label.setTextAlignment("center");
+    if (label.setVerticalTextAlignment) label.setVerticalTextAlignment("center");
+    if (label.setWrapping) label.setWrapping(true);
+    if (label.setWrappingWidth) label.setWrappingWidth(maxW);
+    var size = 18;
+    for (var g = 0; g < 24; g++) {
+      if (label.setCharacterSize) label.setCharacterSize(size);
+      var h = label.getHeight();
+      var w = label.getWidth();
+      if ((h <= maxH && w <= maxW + 1) || size <= 11) break;
+      size -= 1;
+    }
+    label.setX((this.getWidth() - label.getWidth()) / 2);
+    label.setY((this.getHeight() - label.getHeight()) / 2);
+  }
 };
 
 gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.SetLabelTextOp = function(Value, parentEventsFunctionContext) {

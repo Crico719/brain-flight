@@ -1,3 +1,41 @@
+
+// --- Hablemos Claro: auto-fit question panel text ---
+(function() {
+  var proto = gdjs.TextRuntimeObject && gdjs.TextRuntimeObject.prototype;
+  if (!proto || proto.__hcFitPatched) return;
+  var raw = proto.setText;
+  proto.setText = function(t) {
+    raw.call(this, t);
+    var name = this.getName ? this.getName() : "";
+    try {
+      if (name === "QuestionText") {
+        var maxW = this.getWidth();
+        var maxH = this.getHeight();
+        this.setTextAlignment("center");
+        this.setVerticalTextAlignment("center");
+        this.setWrapping(true);
+        this.setWrappingWidth(maxW);
+        var size = 22;
+        for (var g = 0; g < 22; g++) {
+          this.setCharacterSize(size);
+          if ((this.getHeight() <= maxH && this.getWidth() <= maxW + 1) || size <= 12) break;
+          size -= 1;
+        }
+      } else if (name === "QuestionFeedback") {
+        this.setTextAlignment("center");
+        this.setWrapping(true);
+        this.setWrappingWidth(this.getWidth());
+        this.setCharacterSize(18);
+      } else if (name === "HUD_Vidas" || name === "HUD_Puntaje" || name === "HUD_XP" || name === "HUD_Preguntas") {
+        this.setWrapping(false);
+        this.setCharacterSize(22);
+        this.setTextAlignment("left");
+      }
+    } catch (e) {}
+  };
+  proto.__hcFitPatched = true;
+})();
+// --- end auto-fit ---
 gdjs.Game_32SceneCode = {};
 gdjs.Game_32SceneCode.localVariables = [];
 gdjs.Game_32SceneCode.idToCallbackMap = new Map();
