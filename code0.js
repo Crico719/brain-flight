@@ -36,6 +36,74 @@
   proto.__hcFitPatched = true;
 })();
 // --- end auto-fit ---
+// --- Brain Flight: Flappy controller (suave, sin Platformer) ---
+var __flappyVY = 0;
+var __flappyPrevJump = false;
+var __flappyInit = false;
+var __flappyLastLives = -1;
+function __flappyJumpHeld(runtimeScene) {
+  try {
+    if (gdjs.evtTools.input.isKeyPressed(runtimeScene, "Space")) return true;
+    if (gdjs.evtTools.input.isKeyPressed(runtimeScene, "w")) return true;
+    if (gdjs.evtTools.input.isMouseButtonPressed(runtimeScene, "Left")) return true;
+  } catch (e) {}
+  return false;
+}
+function __flappyStep(runtimeScene) {
+  try {
+    var vars = runtimeScene.getScene().getVariables();
+    var gameActive = vars.getFromIndex(1).getAsBoolean();
+    var questionActive = vars.getFromIndex(5).getAsBoolean();
+    var victory = vars.getFromIndex(0).getAsBoolean();
+    var lives = vars.getFromIndex(11).getAsNumber();
+    var objs = runtimeScene.getObjects("Player");
+    if (!objs || objs.length === 0) { __flappyPrevJump = __flappyJumpHeld(runtimeScene); return; }
+    var p = objs[0];
+    if (gdjs.evtTools.runtimeScene.sceneJustBegins(runtimeScene)) {
+      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives;
+    }
+    if (!__flappyInit) {
+      try { p.activateBehavior("PlatformerObject", false); } catch (e) {}
+      try { p.setX(250); p.setY(300); } catch (e) {}
+      __flappyVY = 0; __flappyInit = true; __flappyLastLives = lives;
+      __flappyPrevJump = __flappyJumpHeld(runtimeScene);
+      return;
+    }
+    try { p.activateBehavior("PlatformerObject", false); } catch (e) {}
+    var timeScale = 1;
+    try { timeScale = gdjs.evtTools.runtimeScene.getTimeScale(runtimeScene); } catch (e) {}
+    var playing = (timeScale == 1) && gameActive && !questionActive && !victory && (lives > 0);
+    var held = __flappyJumpHeld(runtimeScene);
+    var justPressed = held && !__flappyPrevJump;
+    __flappyPrevJump = held;
+    if (__flappyLastLives !== lives) { __flappyVY = 0; __flappyLastLives = lives; }
+    if (!playing) { return; }
+    var dt = 0.016;
+    try { dt = gdjs.evtTools.runtimeScene.getElapsedTimeInSeconds(runtimeScene) || 0.016; } catch (e) {}
+    if (dt > 0.05) dt = 0.05;
+    var GRAV = 2100, JUMP = -600, MAXFALL = 950, MAXRISE = -650;
+    if (justPressed) {
+      __flappyVY = JUMP;
+      try { gdjs.evtTools.sound.playSound(runtimeScene, "Jump_Start_02.wav", false, 70, gdjs.randomFloatInRange(0.9, 1.1)); } catch (e) {}
+    } else {
+      __flappyVY += GRAV * dt;
+    }
+    if (__flappyVY > MAXFALL) __flappyVY = MAXFALL;
+    if (__flappyVY < MAXRISE) __flappyVY = MAXRISE;
+    var y = p.getY() + __flappyVY * dt;
+    var TOP = 70, BOTTOM = 630;
+    if (y < TOP) { y = TOP; if (__flappyVY < 0) __flappyVY = 0; }
+    if (y > BOTTOM) { y = BOTTOM; if (__flappyVY > 0) __flappyVY = 0; }
+    try { p.setY(y); } catch (e) {}
+    try {
+      var ang = __flappyVY / 40;
+      if (ang < -25) ang = -25;
+      if (ang > 35) ang = 35;
+      p.setAngle(ang);
+    } catch (e) {}
+  } catch (e) {}
+}
+// --- end Flappy controller ---
 gdjs.Game_32SceneCode = {};
 gdjs.Game_32SceneCode.localVariables = [];
 gdjs.Game_32SceneCode.idToCallbackMap = new Map();
@@ -416,6 +484,7 @@ gdjs.Game_32SceneCode.mapOfGDgdjs_9546Game_959532SceneCode_9546GDConfettiObjects
 gdjs.Game_32SceneCode.mapOfGDgdjs_9546Game_959532SceneCode_9546GDConfettiObjects1Objects = Hashtable.newFrom({"Confetti": gdjs.Game_32SceneCode.GDConfettiObjects1});
 gdjs.Game_32SceneCode.mapOfGDgdjs_9546Game_959532SceneCode_9546GDConfettiObjects1Objects = Hashtable.newFrom({"Confetti": gdjs.Game_32SceneCode.GDConfettiObjects1});
 gdjs.Game_32SceneCode.eventsList6 = function(runtimeScene) {
+__flappyStep(runtimeScene);
 
 {
 
@@ -473,19 +542,13 @@ if(isConditionTrue_1) {
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("Player"), gdjs.Game_32SceneCode.GDPlayerObjects1);
 {for(var i = 0, len = gdjs.Game_32SceneCode.GDPlayerObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDPlayerObjects1[i].getBehavior("PlatformerObject").simulateControl("Jump");
+    try { gdjs.Game_32SceneCode.GDPlayerObjects1[i].getBehavior("PlatformerObject").simulateControl("Jump"); } catch (e) {}
 }
 }
-{gdjs.evtTools.sound.playSound(runtimeScene, "Jump_Start_02.wav", false, 70, gdjs.randomFloatInRange(0.9, 1.1));
-}
-}
-
+/* Flappy: el sonido del salto lo reproduce __flappyStep una sola vez por salto */
 }
 
-
-{
-
-{
+}
 
 {
 
@@ -910,9 +973,7 @@ gdjs.copyArray(runtimeScene.getObjects("QuestionText"), gdjs.Game_32SceneCode.GD
 }
 {runtimeScene.getScene().getVariables().getFromIndex(2).setNumber(runtimeScene.getScene().getVariables().getFromIndex(12).getAsNumber() + 5);
 }
-{for(var i = 0, len = gdjs.Game_32SceneCode.GDPlayerObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDPlayerObjects1[i].activateBehavior("PlatformerObject", true);
-}
+{/* Flappy: Platformer se mantiene desactivado; la fisica la lleva __flappyStep */
 }
 {for(var i = 0, len = gdjs.Game_32SceneCode.GDQuestionPanelObjects1.length ;i < len;++i) {
     gdjs.Game_32SceneCode.GDQuestionPanelObjects1[i].hide();

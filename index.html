@@ -139,62 +139,6 @@
 
         //Load all assets and start the game
         game.loadAllAssets(function() {
-            // Create a Floor object at bottom of screen (y=592) with Platform behavior
-            var floorObj = {
-                name: "Floor",
-                type: "Sprite",
-                effects: [],
-                variables: [],
-                behaviors: [
-                    {
-                        name: "Platform",
-                        type: "PlatformBehavior::PlatformBehavior",
-                        canGoDownFromJumpthru: true,
-                        grabHorizontalTolerance: 0,
-                        grabVerticalTolerance: 0,
-                        isGrabable: false,
-                        isJumpthru: false,
-                        ladderClimbingSpeed: 200,
-                        maxFallingSpeed: 700,
-                        maxSpeed: 400,
-                        slopeMaxAngle: 60,
-                        useLegacyTrajectory: false,
-                        xGrabTolerance: 10,
-                        yGrabOffset: 0
-                    },
-                    { name: "Effect", type: "EffectCapability::EffectBehavior" },
-                    { name: "Opacity", type: "OpacityCapability::OpacityBehavior" },
-                    { name: "Resizable", type: "ResizableCapability::ResizableBehavior" }
-                ],
-                animations: [{
-                    name: "",
-                    useMultipleDirections: false,
-                    directions: [{
-                        looping: false,
-                        timeBetweenFrames: 0.08,
-                        sprites: [{
-                            hasCustomCollisionMask: false,
-                            image: "assets/StartingGround.png",
-                            originX: 0.5,
-                            originY: 0.5
-                        }]
-                    }]
-                }],
-                width: 1280,
-                height: 128,
-                hitBoxes: [{"originX": 0, "originY": 0, "width": 1280, "height": 128}]
-            };
-            gdjs.projectData.objects.push(floorObj);
-            
-            // Create floor instance at bottom of screen (y=592)
-            var runtimeScene = game.getScene();
-            var floorObjMap = gdjs["FloorObjects1"] = [];
-            var floorInstance = runtimeScene.createObject("Floor", 0, 592, "");
-            if (floorInstance) {
-                floorInstance.setX(640);
-                floorInstance.setY(592);
-            }
-            
             game.startGameLoop();
         });
     })();
