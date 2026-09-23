@@ -41,6 +41,8 @@ var __flappyVY = 0;
 var __flappyPrevJump = false;
 var __flappyInit = false;
 var __flappyLastLives = -1;
+var __flappyStarted = false;
+var __flappyEverStarted = false;
 var __quizErrors = 0;
 var __quizWrongAt = 0;
 function __flappyJumpHeld(runtimeScene) {
@@ -81,7 +83,8 @@ function __flappyStep(runtimeScene) {
     if (!objs || objs.length === 0) { __flappyPrevJump = __flappyJumpHeld(runtimeScene); return; }
     var p = objs[0];
     if (gdjs.evtTools.runtimeScene.sceneJustBegins(runtimeScene)) {
-      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives; __quizErrors = 0;
+      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives; __quizErrors = 0; __flappyStarted = false; vars.getFromIndex(1).setBoolean(false);
+      if (__flappyEverStarted) { __flappyStarted = true; vars.getFromIndex(1).setBoolean(true); }
     }
     if (!__flappyInit) {
       try { p.activateBehavior("PlatformerObject", false); } catch (e) {}
@@ -95,7 +98,17 @@ function __flappyStep(runtimeScene) {
     try { timeScale = gdjs.evtTools.runtimeScene.getTimeScale(runtimeScene); } catch (e) {}
     var playing = (timeScale == 1) && gameActive && !questionActive && !victory && (lives > 0);
     var held = __flappyJumpHeld(runtimeScene);
-    var justPressed = held && !__flappyPrevJump;
+    if (typeof window !== "undefined" && window.__brainFlightStarted === true) {
+      window.__brainFlightStarted = false;
+      __flappyEverStarted = true;
+      if (!__flappyStarted) {
+        __flappyStarted = true;
+        vars.getFromIndex(1).setBoolean(true);
+        __flappyVY = 0;
+        __flappyPrevJump = held;
+      }
+    }
+    var justPressed = held && !__flappyPrevJump && __flappyStarted;
     __flappyPrevJump = held;
     if (__flappyLastLives !== lives) { __flappyVY = 0; __flappyLastLives = lives; }
     if (!playing) { return; }
