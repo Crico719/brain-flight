@@ -140,9 +140,12 @@
         //Load all assets and start the game
         game.loadAllAssets(function() {
             // Add Platform behavior to Boundary object so player can stand on it
+            console.log("Injecting Platform behavior to Boundary...");
             var objects = gdjs.projectData.objects;
             for (var i = 0; i < objects.length; ++i) {
                 if (objects[i].name === "Boundary") {
+                    console.log("Found Boundary object:", objects[i]);
+                    if (!objects[i].behaviors) objects[i].behaviors = [];
                     objects[i].behaviors.push({
                         name: "Platform",
                         type: "PlatformBehavior::PlatformBehavior",
@@ -159,6 +162,7 @@
                         xGrabTolerance: 10,
                         yGrabOffset: 0
                     });
+                    console.log("Platform behavior added to Boundary");
                     break;
                 }
             }
