@@ -41,6 +41,8 @@ var __flappyVY = 0;
 var __flappyPrevJump = false;
 var __flappyInit = false;
 var __flappyLastLives = -1;
+var __quizErrors = 0;
+var __quizWrongAt = 0;
 function __flappyJumpHeld(runtimeScene) {
   try {
     if (gdjs.evtTools.input.isKeyPressed(runtimeScene, "Space")) return true;
@@ -49,6 +51,24 @@ function __flappyJumpHeld(runtimeScene) {
   } catch (e) {}
   return false;
 }
+function __quizWrong(runtimeScene) {
+  try {
+    var t = Date.now();
+    if (t - __quizWrongAt < 400) return;
+    __quizWrongAt = t;
+    __quizErrors++;
+    if (__quizErrors >= 2) {
+      __quizErrors = 0;
+      try { gdjs.evtTools.sound.playSound(runtimeScene, "Lose 2.aac", false, 90, 1); } catch (e) {}
+      gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, gdjs.evtTools.runtimeScene.getSceneName(runtimeScene), false);
+    } else {
+      var qf = runtimeScene.getObjects("QuestionFeedback");
+      for (var qi = 0; qi < qf.length; ++qi) {
+        try { qf[qi].getBehavior("Text").setText("❌ No es correcta. ¡Te queda 1 intento!"); } catch (e2) {}
+      }
+    }
+  } catch (e) {}
+}
 function __flappyStep(runtimeScene) {
   try {
     var vars = runtimeScene.getScene().getVariables();
@@ -56,11 +76,12 @@ function __flappyStep(runtimeScene) {
     var questionActive = vars.getFromIndex(5).getAsBoolean();
     var victory = vars.getFromIndex(0).getAsBoolean();
     var lives = vars.getFromIndex(11).getAsNumber();
+    if (vars.getFromIndex(4).getAsNumber() == 1) { __quizErrors = 0; }
     var objs = runtimeScene.getObjects("Player");
     if (!objs || objs.length === 0) { __flappyPrevJump = __flappyJumpHeld(runtimeScene); return; }
     var p = objs[0];
     if (gdjs.evtTools.runtimeScene.sceneJustBegins(runtimeScene)) {
-      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives;
+      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives; __quizErrors = 0;
     }
     if (!__flappyInit) {
       try { p.activateBehavior("PlatformerObject", false); } catch (e) {}
@@ -332,9 +353,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("QuestionFeedback"), gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1);
-{for(var i = 0, len = gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1[i].getBehavior("Text").setText("❌ No es correcta. ¡Inténtalo de nuevo!");
-}
+{__quizWrong(runtimeScene);
 }
 }
 
@@ -378,9 +397,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("QuestionFeedback"), gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1);
-{for(var i = 0, len = gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1[i].getBehavior("Text").setText("❌ No es correcta. ¡Inténtalo de nuevo!");
-}
+{__quizWrong(runtimeScene);
 }
 }
 
@@ -424,9 +441,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("QuestionFeedback"), gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1);
-{for(var i = 0, len = gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1[i].getBehavior("Text").setText("❌ No es correcta. ¡Inténtalo de nuevo!");
-}
+{__quizWrong(runtimeScene);
 }
 }
 
@@ -470,9 +485,7 @@ isConditionTrue_0 = false;
 }
 if (isConditionTrue_0) {
 gdjs.copyArray(runtimeScene.getObjects("QuestionFeedback"), gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1);
-{for(var i = 0, len = gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1.length ;i < len;++i) {
-    gdjs.Game_32SceneCode.GDQuestionFeedbackObjects1[i].getBehavior("Text").setText("❌ No es correcta. ¡Inténtalo de nuevo!");
-}
+{__quizWrong(runtimeScene);
 }
 }
 
