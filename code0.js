@@ -1,6 +1,5 @@
 
 // --- Hablemos Claro: auto-fit question panel text ---
-// v=4 hide at start
 (function() {
   var proto = gdjs.TextRuntimeObject && gdjs.TextRuntimeObject.prototype;
   if (!proto || proto.__hcFitPatched) return;
@@ -486,6 +485,8 @@ gdjs.copyArray(runtimeScene.getObjects("Player"), gdjs.Game_32SceneCode.GDPlayer
 
 {
 
+{
+
 
 {
 
@@ -559,8 +560,6 @@ isConditionTrue_0 = gdjs.evtTools.runtimeScene.sceneJustBegins(runtimeScene);
 if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.resetTimer(runtimeScene, "HitCooldown");
 }
-{runtimeScene.getScene().getVariables().getFromIndex(1).setBoolean(false);
-}
 {gdjs.copyArray(runtimeScene.getObjects("Player"), gdjs.Game_32SceneCode.GDPlayerObjects1);
 {for(var i = 0, len = gdjs.Game_32SceneCode.GDPlayerObjects1.length ;i < len;++i) {
     gdjs.Game_32SceneCode.GDPlayerObjects1[i].activateBehavior("PlatformerObject", false);
@@ -570,9 +569,8 @@ if (isConditionTrue_0) {
 }
 }
 }
-}
 
-}
+ {
 
 
 {
