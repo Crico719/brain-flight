@@ -139,6 +139,29 @@
 
         //Load all assets and start the game
         game.loadAllAssets(function() {
+            // Add Platform behavior to Boundary object so player can stand on it
+            var objects = gdjs.projectData.objects;
+            for (var i = 0; i < objects.length; ++i) {
+                if (objects[i].name === "Boundary") {
+                    objects[i].behaviors.push({
+                        name: "Platform",
+                        type: "PlatformBehavior::PlatformBehavior",
+                        canGoDownFromJumpthru: true,
+                        grabHorizontalTolerance: 0,
+                        grabVerticalTolerance: 0,
+                        isGrabable: false,
+                        isJumpthru: false,
+                        ladderClimbingSpeed: 200,
+                        maxFallingSpeed: 700,
+                        maxSpeed: 400,
+                        slopeMaxAngle: 60,
+                        useLegacyTrajectory: false,
+                        xGrabTolerance: 10,
+                        yGrabOffset: 0
+                    });
+                    break;
+                }
+            }
             game.startGameLoop();
         });
     })();
