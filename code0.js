@@ -15,10 +15,10 @@
         this.setVerticalTextAlignment("center");
         this.setWrapping(true);
         this.setWrappingWidth(maxW);
-        var size = 22;
-        for (var g = 0; g < 22; g++) {
+        var size = 26;
+        for (var g = 0; g < 26; g++) {
           this.setCharacterSize(size);
-          if ((this.getHeight() <= maxH && this.getWidth() <= maxW + 1) || size <= 12) break;
+          if ((this.getHeight() <= maxH && this.getWidth() <= maxW + 1) || size <= 14) break;
           size -= 1;
         }
       } else if (name === "QuestionFeedback") {
