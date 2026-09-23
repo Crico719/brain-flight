@@ -1,5 +1,6 @@
 
 // --- Hablemos Claro: auto-fit question panel text ---
+// v=4 hide at start
 (function() {
   var proto = gdjs.TextRuntimeObject && gdjs.TextRuntimeObject.prototype;
   if (!proto || proto.__hcFitPatched) return;
