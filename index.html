@@ -22,49 +22,7 @@
             margin-right: auto;
             overflow: hidden;
         }
-        #startOverlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #startOverlay h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #ff6b6b;
-            text-shadow: 0 0 20px rgba(255,107,107,0.5);
-        }
-        #startOverlay p {
-            font-size: 24px;
-            margin-bottom: 30px;
-            color: #ccc;
-        }
-        #startOverlay .space-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 22px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-        #startOverlay .space-btn:hover {
-            background: #ff4757;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        
 	</style>
     <!-- Libs and GDJS core files : -->
 		<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
@@ -160,48 +118,30 @@
 	<script src="object-capabilities/ResizableBehavior.js" crossorigin="anonymous"></script>
 	<script src="object-capabilities/ScalableBehavior.js" crossorigin="anonymous"></script>
 	<script src="object-capabilities/TextContainerBehavior.js" crossorigin="anonymous"></script>
-	<script src="code0.js?v=5" crossorigin="anonymous"></script>
+	<script src="code0.js" crossorigin="anonymous"></script>
 	<script src="data.js" crossorigin="anonymous"></script>
 
 
 </head>
 <body>
-    <div id="startOverlay">
-        <h1>🧠 BRAIN FLIGHT</h1>
-        <p>¡Responde las preguntas y salta los obstáculos!</p>
-        <button class="space-btn" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{code:'Space'}))">PRESIONA SPACE PARA COMENZAR</button>
-    </div>
     
 	<script>
-        (function() {
-            //Initialization
-            var game = new gdjs.RuntimeGame(gdjs.projectData, gdjs.runtimeGameOptions);
 
-            //Create a renderer
-            game.getRenderer().createStandardCanvas(document.body);
+    (function() {
+        //Initialization
+        var game = new gdjs.RuntimeGame(gdjs.projectData, gdjs.runtimeGameOptions);
 
-            //Bind keyboards/mouse/touch events
-            game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+        //Create a renderer
+        game.getRenderer().createStandardCanvas(document.body);
 
-            //Load all assets and start the game
-            game.loadAllAssets(function() {
-                game.startGameLoop();
-            });
+        //Bind keyboards/mouse/touch events
+        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
 
-            // Start overlay: hide when Space is pressed
-            var overlay = document.getElementById('startOverlay');
-            if (overlay) {
-                function hideOverlay() {
-                    overlay.style.display = 'none';
-                    document.removeEventListener('keydown', hideOverlay);
-                    overlay.removeEventListener('click', hideOverlay);
-                }
-                document.addEventListener('keydown', function(e) {
-                    if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); hideOverlay(); }
-                });
-                overlay.addEventListener('click', hideOverlay);
-            }
-        })();
+        //Load all assets and start the game
+        game.loadAllAssets(function() {
+            game.startGameLoop();
+        });
+    })();
 
 	</script>
 </body>
