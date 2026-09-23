@@ -28,7 +28,7 @@
         this.setCharacterSize(18);
       } else if (name === "HUD_Vidas" || name === "HUD_Puntaje" || name === "HUD_XP" || name === "HUD_Preguntas") {
         this.setWrapping(false);
-        this.setCharacterSize(22);
+        this.setCharacterSize(20);
         this.setTextAlignment("left");
       }
     } catch (e) {}
