@@ -1028,6 +1028,11 @@ for (var i = 0, k = 0, l = gdjs.Game_32SceneCode.GDBtnRetryObjects1.length;i<l;+
 }
 gdjs.Game_32SceneCode.GDBtnRetryObjects1.length = k;
 if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = (runtimeScene.getScene().getVariables().getFromIndex(11).getAsNumber() <= 0);
+}
+}
+if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, gdjs.evtTools.runtimeScene.getSceneName(runtimeScene), false);
 }
 }
@@ -1049,6 +1054,11 @@ for (var i = 0, k = 0, l = gdjs.Game_32SceneCode.GDBtnAgainObjects1.length;i<l;+
     }
 }
 gdjs.Game_32SceneCode.GDBtnAgainObjects1.length = k;
+if (isConditionTrue_0) {
+isConditionTrue_0 = false;
+{isConditionTrue_0 = runtimeScene.getScene().getVariables().getFromIndex(0).getAsBoolean();
+}
+}
 if (isConditionTrue_0) {
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, gdjs.evtTools.runtimeScene.getSceneName(runtimeScene), false);
 }
