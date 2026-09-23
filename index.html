@@ -139,62 +139,33 @@
 
         //Load all assets and start the game
         game.loadAllAssets(function() {
-            // Add a Floor object at the bottom of the screen for the player to stand on
-            var floorObj = {
-                name: "Floor",
-                type: "Sprite",
-                effects: [],
-                variables: [],
-                behaviors: [
-                    {
-                        name: "Platform",
-                        type: "PlatformBehavior::PlatformBehavior",
-                        canGoDownFromJumpthru: true,
-                        grabHorizontalTolerance: 0,
-                        grabVerticalTolerance: 0,
-                        isGrabable: false,
-                        isJumpthru: false,
-                        ladderClimbingSpeed: 200,
-                        maxFallingSpeed: 700,
-                        maxSpeed: 400,
-                        slopeMaxAngle: 60,
-                        useLegacyTrajectory: false,
-                        xGrabTolerance: 10,
-                        yGrabOffset: 0
-                    },
-                    { name: "Effect", type: "EffectCapability::EffectBehavior" },
-                    { name: "Opacity", type: "OpacityCapability::OpacityBehavior" },
-                    { name: "Resizable", type: "ResizableCapability::ResizableBehavior" }
-                ],
-                animations: [{
-                    name: "",
-                    useMultipleDirections: false,
-                    directions: [{
-                        looping: false,
-                        timeBetweenFrames: 0.08,
-                        sprites: [{
-                            hasCustomCollisionMask: false,
-                            image: "assets/StartingGround.png",
-                            originX: 0.5,
-                            originY: 0.5
-                        }]
-                    }]
-                }],
-                width: 1280,
-                height: 128,
-                hitBoxes: [{"originX": 0, "originY": 0, "width": 1280, "height": 128}]
-            };
-            gdjs.projectData.objects.push(floorObj);
-            
-            // Create floor instance at bottom of screen
-            var runtimeScene = game.getScene();
-            var floorObjMap = gdjs["FloorObjects1"] = [];
-            var floorInstance = runtimeScene.createObject("Floor", 0, 592, "");
-            if (floorInstance) {
-                floorInstance.setX(640);
-                floorInstance.setY(592);
+            // Add Platform behavior to Boundary object so player can stand on it
+            var objects = gdjs.projectData.objects;
+            for (var i = 0; i < objects.length; ++i) {
+                if (objects[i].name === "Boundary") {
+                    if (!objects[i].behaviors) objects[i].behaviors = [];
+                    var hasPlatform = objects[i].behaviors.some(function(b) { return b.type === "PlatformBehavior::PlatformBehavior"; });
+                    if (!hasPlatform) {
+                        objects[i].behaviors.push({
+                            name: "Platform",
+                            type: "PlatformBehavior::PlatformBehavior",
+                            canGoDownFromJumpthru: true,
+                            grabHorizontalTolerance: 0,
+                            grabVerticalTolerance: 0,
+                            isGrabable: false,
+                            isJumpthru: false,
+                            ladderClimbingSpeed: 200,
+                            maxFallingSpeed: 700,
+                            maxSpeed: 400,
+                            slopeMaxAngle: 60,
+                            useLegacyTrajectory: false,
+                            xGrabTolerance: 10,
+                            yGrabOffset: 0
+                        });
+                    }
+                    break;
+                }
             }
-            
             game.startGameLoop();
         });
     })();
