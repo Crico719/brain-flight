@@ -1259,9 +1259,6 @@ gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.I
 gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.IsClickedContext.GDBitmapLabelObjects2.length = 0;
 
 
-if (!this.isVisible()) {
-  return false;
-}
 return !!eventsFunctionContext.returnValue;
 }
 gdjs.evtsExt__PanelSpriteButton__PanelSpriteButton.PanelSpriteButton.prototype.IsHoveredContext = {};

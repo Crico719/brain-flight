@@ -582,28 +582,9 @@ let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
 isConditionTrue_0 = !(gdjs.evtsExt__PanelSpriteButton__IsInGameEdition.func(runtimeScene, eventsFunctionContext));
 if (isConditionTrue_0) {
-isConditionTrue_0 = false;
-{
-var __btnObjs = eventsFunctionContext.getObjects("Object");
-isConditionTrue_0 = (__btnObjs.length > 0 && __btnObjs[0].isVisible());
-}
-}
-if (isConditionTrue_0) {
 
 { //Subevents
 gdjs.evtsExt__PanelSpriteButton__ButtonFSM.ButtonFSM.prototype.doStepPostEventsContext.eventsList9(runtimeScene, eventsFunctionContext);} //End of subevents
-} else {
-{
-var __btnObjs2 = eventsFunctionContext.getObjects("Object");
-for (var __i = 0; __i < __btnObjs2.length; ++__i) {
-  var __st = __btnObjs2[__i].getBehavior(eventsFunctionContext.getBehaviorName("Behavior"))._getState();
-  if (__st === "Validated" || __st === "PressedInside" || __st === "PressedOutside" || __st === "Hovered") {
-    __btnObjs2[__i].getBehavior(eventsFunctionContext.getBehaviorName("Behavior"))._setState("Idle");
-  }
-  __btnObjs2[__i].getBehavior(eventsFunctionContext.getBehaviorName("Behavior"))._setTouchId(0);
-  __btnObjs2[__i].getBehavior(eventsFunctionContext.getBehaviorName("Behavior"))._setTouchIsInside(false);
-}
-}
 }
 
 }
