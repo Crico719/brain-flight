@@ -53,6 +53,34 @@ function __flappyJumpHeld(runtimeScene) {
   } catch (e) {}
   return false;
 }
+var __flappyOverlayDone = false;
+function __flappyEnsureOverlay() {
+  try {
+    if (__flappyEverStarted || __flappyStarted) return;
+    if (typeof document === "undefined") return;
+    var ov = document.getElementById("startOverlay");
+    if (ov) { if (ov.style.display === "none") ov.style.display = "flex"; return; }
+    if (__flappyOverlayDone || !document.body) return;
+    __flappyOverlayDone = true;
+    var st = document.createElement("style");
+    st.textContent = "#startOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.82);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;color:#fff;font-family:Arial,sans-serif;text-align:center;}#startOverlay h1{font-size:52px;margin:0 0 12px 0;color:#ffd93b;}#startOverlay p{font-size:22px;margin:0 0 28px 0;color:#ddd;}#startBtn{background:#2ecc71;color:#fff;border:none;padding:20px 70px;font-size:30px;font-weight:bold;border-radius:14px;cursor:pointer;}";
+    document.head.appendChild(st);
+    ov = document.createElement("div");
+    ov.id = "startOverlay";
+    var h = document.createElement("h1"); h.textContent = "BRAIN FLIGHT"; ov.appendChild(h);
+    var pp = document.createElement("p"); pp.textContent = "Responde las preguntas y salta los obstaculos"; ov.appendChild(pp);
+    var b = document.createElement("button"); b.id = "startBtn"; b.textContent = "COMENZAR";
+    b.addEventListener("click", function() { var o = document.getElementById("startOverlay"); if (o) o.style.display = "none"; window.__brainFlightStarted = true; try { b.blur(); } catch (e) {} });
+    ov.appendChild(b);
+    document.body.appendChild(ov);
+    document.addEventListener("keydown", function(e) {
+      if (e.code === "Space" || e.code === "Enter" || e.key === " ") {
+        var o2 = document.getElementById("startOverlay");
+        if (o2 && o2.style.display !== "none") { try { e.preventDefault(); } catch (ee) {} o2.style.display = "none"; window.__brainFlightStarted = true; }
+      }
+    });
+  } catch (e) {}
+}
 function __quizWrong(runtimeScene) {
   try {
     var t = Date.now();
@@ -79,6 +107,7 @@ function __flappyStep(runtimeScene) {
     var victory = vars.getFromIndex(0).getAsBoolean();
     var lives = vars.getFromIndex(11).getAsNumber();
     if (vars.getFromIndex(4).getAsNumber() == 1) { __quizErrors = 0; }
+    __flappyEnsureOverlay();
     var objs = runtimeScene.getObjects("Player");
     if (!objs || objs.length === 0) { __flappyPrevJump = __flappyJumpHeld(runtimeScene); return; }
     var p = objs[0];
