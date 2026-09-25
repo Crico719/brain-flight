@@ -45,6 +45,20 @@ var __flappyStarted = false;
 var __flappyEverStarted = false;
 var __quizErrors = 0;
 var __quizWrongAt = 0;
+var __quizOrder = null;
+function __shuffleQuiz(n) {
+  var a = [];
+  for (var i = 0; i < n; i++) a.push(i);
+  for (var k = a.length - 1; k > 0; k--) {
+    var j = Math.floor(Math.random() * (k + 1));
+    var t = a[k]; a[k] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function __quizPick(answered) {
+  if (__quizOrder && answered >= 0 && answered < __quizOrder.length) return __quizOrder[answered];
+  return answered;
+}
 function __flappyJumpHeld(runtimeScene) {
   try {
     if (gdjs.evtTools.input.isKeyPressed(runtimeScene, "Space")) return true;
@@ -112,7 +126,10 @@ function __flappyStep(runtimeScene) {
     if (!objs || objs.length === 0) { __flappyPrevJump = __flappyJumpHeld(runtimeScene); return; }
     var p = objs[0];
     if (gdjs.evtTools.runtimeScene.sceneJustBegins(runtimeScene)) {
-      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives; __quizErrors = 0; __flappyStarted = false; vars.getFromIndex(1).setBoolean(false);
+      __flappyVY = 0; __flappyPrevJump = false; __flappyInit = false; __flappyLastLives = lives; __quizErrors = 0;
+      var __nq = 20;
+      try { var __c = vars.getFromIndex(6).getChildrenCount(); if (__c > 0) __nq = __c; } catch (e) {}
+      __quizOrder = __shuffleQuiz(__nq); __flappyStarted = false; vars.getFromIndex(1).setBoolean(false);
       if (__flappyEverStarted) { __flappyStarted = true; vars.getFromIndex(1).setBoolean(true); }
     }
     if (!__flappyInit) {
@@ -805,7 +822,7 @@ gdjs.copyArray(runtimeScene.getObjects("QuestionPanel"), gdjs.Game_32SceneCode.G
 gdjs.copyArray(runtimeScene.getObjects("QuestionText"), gdjs.Game_32SceneCode.GDQuestionTextObjects1);
 {runtimeScene.getScene().getVariables().getFromIndex(5).setBoolean(true);
 }
-{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber());
+{runtimeScene.getScene().getVariables().getFromIndex(3).setNumber(__quizPick(runtimeScene.getScene().getVariables().getFromIndex(7).getAsNumber()));
 }
 {runtimeScene.getScene().getVariables().getFromIndex(4).setNumber(0);
 }
